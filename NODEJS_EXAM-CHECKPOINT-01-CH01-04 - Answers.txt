@@ -1,0 +1,762 @@
+BEGINNING NODE.JS — CHECKPOINT EXAMINATION 01
+Coverage: Chapters 1–4
+Primary assessed unit: Chapters 2–4 (Chapter 1 is introductory context)
+Total: 100 points
+Suggested time: 120 minutes
+Mastery threshold: 90%, with no unresolved critical weakness
+
+Learner name: Minalu Mesele
+Date started: 9:34, 27th September, 2026
+Date completed: 10:55, 27th September, 2026
+
+
+EXAMINATION CONDITIONS
+
+This is a closed-book examination. While answering:
+
+1. Do not use the book, notes, internet, AI, IDE autocomplete, Node.js runtime,
+   REPL, debugger, or external solutions.
+2. Use only this plain-text file and a plain-text editor.
+3. Answer from memory and in your own words.
+4. Explain why, not only what. For every output question, show your reasoning.
+5. If you are unsure, write "I don't know" rather than guessing.
+6. Do not request or receive hints while the examination is in progress.
+7. Do not alter the questions or point values. Type only in the answer spaces.
+
+Declaration: I completed this examination under the conditions above.
+
+Signature or initials: Minalu Mesele
+
+
+======================================================================
+SECTION A — FOUNDATIONAL CONCEPTS AND TERMINOLOGY (30 POINTS)
+======================================================================
+
+QUESTION 1 — Development basics (4 points)
+
+a. What does REPL stand for, and what is its purpose? (2 points)
+b. State the commands used to start the Node.js REPL and to execute a script
+   named app.js from a terminal. (2 points)
+
+ANSWER: 
+ 
+a. REPL stands for read, evaluate, print and loop. The purpose we have REPL to have line by line execution of JavaScript codes from terminal.
+b. To start the Node.js REPL we put node and press enter on terminal, while to execute script we put node <path/to/file> .
+
+
+QUESTION 2 — Functions and closures (6 points)
+
+Define each of the following and explain how they relate to one another:
+
+a. first-class function;
+b. higher-order function;
+c. callback;
+d. closure.
+
+
+Your explanation must include why first-class functions and closures are useful
+for asynchronous Node.js programs.
+
+ANSWER:
+
+
+a. First class function means functions can be treated like any other variable. We can assign to other variables, pass to functions as argument and return from functions return statement.
+
+b. Higher order functions are functions who accept other functions as parameter or return function.
+
+c. Callback - are functions passed to higher order function. They are called callbacks since the higher order function executes them after some conditions fulfill. For instance the console printing function we passed to the setTimeout function is called callback while the setTimeout is higher order function.
+
+d. closure - is inner function being able to access the outer function variables even the outer function has returned. Closures help keep state for each invocation of the outer functions so that inner functions get the exact state ( arguments passed and other variables inside the app ) at the invocation of that function.
+
+-> First class functions and Closures are useful for async operations. Asynchronous operations finish in unpredicted way so we need to have a block of code that will respond to the operation results at the time it finishes. Closure keeps the state safe ( not mutation of variables) and callbacks wait till that operations ends, hence the benefit of first class function.
+
+
+
+
+QUESTION 3 — Values, equality, and Boolean contexts (5 points)
+
+Explain the differences among undefined, null, and an undeclared/nonexistent
+object property. Then:
+
+a. distinguish == from ===;
+b. list the important falsy values covered in Chapter 2;
+c. state whether empty arrays and empty object literals are truthy or falsy.
+
+ANSWER:
+
+undefined - represents a variable which is declared but not assigned a value, or a function with no return statement.
+null - an explicit assignment value which represents intentional absence of any object or value.
+undeclared variable - a variable which has never been declared in the code, trying to access such variable makes reference error.
+non existent object property - a property that does not exist in object, trying to access such non existing properties of an object returns undefined.
+
+a. == checks for equality with implicit type coercion while === (strict) check for equality of the operands with no type coercion, so to be strictly equal the operands must be of the same data type and equal value.
+b. Some of falsy vales are , string "" , number 0,  -0, Boolean false, null, undefined and NaN.
+c. Empty arrays and empty object literals both are truthy!
+
+
+
+
+
+QUESTION 4 — CommonJS module fundamentals (5 points)
+
+Name the three kinds of modules described in Chapters 3–4. Then explain the
+roles of each of the following in the CommonJS system:
+
+    require
+    module
+    module.exports
+    exports
+
+Include the default value exported by a newly loaded JavaScript module.
+
+ANSWER:
+
+Three kinds of modules:
+
+1. External modules / Third party - installed via npm into our node modules directory of the application we can access them by putting their name as string in require function.
+2. Core modules / Built-in - prepackaged modules compiled into Node.js. They can be required directly with no need of installation. e.g fs, path and http.
+3. File based modules / Local - those are modules we ourselves define in the app, we import them with require function and relative path as argument to the require function.
+
+Roles in CommonJs
+
+require - executes the required module, caches the result and returns the modules exported interface ( module.exports.
+module - is free variable or object representing the current module. It contains the metadata of the current module including the ID, exports, loading status and others.
+module.exports is the property to state what to export from the current module, when the current module is required, the code in this module will be executed and the export object will be the return value for the require statement.
+exports - is alias to module.exports. Reassigning exports variable would break the link of this alias variable to the modules.exports.
+
+-> the defualt value exported by newly loaded javscript module is empty object {}.
+
+
+
+QUESTION 5 — Node.js globals and core facilities (4 points)
+
+Briefly state the purpose of each item:
+
+    __filename
+    __dirname
+    process.argv
+    Buffer
+
+For process.argv, identify what its first two elements represent.
+
+ANSWER:
+__filename - gives string of absolue path of the file.
+__dirname - gives us the absolute path of the directory the executing file is in.
+process.argv - an array with the first two argument process.argv[0], process.argv[1] representing the node executable and the file path of currently being executed code.
+Buffer - Global class in Node.js for representing, manipulate and allocate fixed-length sequence of raw binary data in memory. It is used in handling binary streams, reading files or managing network sockets.
+
+
+
+QUESTION 6 — JSON, package.json, and semantic versioning (6 points)
+
+a. Give three restrictions that distinguish valid JSON from a general
+   JavaScript object literal. (2 points)
+b. Explain what JSON.stringify and JSON.parse do. (1 point)
+c. Explain the purpose of package.json when consuming packages. (1 point)
+d. In a semantic version X.Y.Z, explain when X, Y, and Z change. (2 points)
+
+ANSWER:
+
+a. 1. we need to wrap each property of object as string while javaScript does not require it.
+   2. We need use comma at the end of each json object property values, trailing comma after last property value is unacceptable in json.
+   3. we can not have some data types in json like functions, undefined or comments too. 
+
+b. JSON.stringfy - converts JavaScript objects or values to JSON.
+   JSON.parse - converts valid JSON string to JavaScript object.
+
+c. Package.json main purpose is dependency management along with the metadata of the projects. we keep the track of every installed external modules in package.json as dependencies, we have main property for specifying the entry of the application, we have also scripts property to define scripts that should be run used with npm run command to execute some operations like tests.
+
+d. In semantic versioning X.Y.Z -> X is called major version number increments when we have new feature or bug fix which is backward incompatible, whereas Y is called minor version incremented when we have backward compatible new feature and finally we have Z which is called patch number and increments when we have backward compatible bug fixes.
+
+
+======================================================================
+SECTION B — MECHANISMS AND TRADE-OFFS (25 POINTS)
+======================================================================
+
+QUESTION 7 — The I/O scaling problem (7 points)
+
+Explain the I/O scaling problem and compare these three server designs:
+
+    one process per request
+    one thread from a pool per request
+    Node.js event-loop-based request handling
+
+Discuss CPU use, memory use, waiting for I/O, and context-switching overhead.
+Conclude by explaining why JavaScript's first-class functions and closures make
+it suitable for Node.js's approach.
+
+ANSWER:
+
+
+I/O scaling problem is challenge on servers to handle thousands of I/O requests simultaneously. Some of the I/O requests include database queries, network calls and disk file content operations. IF I/O approach used is blocking meaning if the process or thread has to wait till the IO operation ends we will have our CPU and memory resources wasted because of overhead more than the actual work.
+
+The three server designs
+1. One process per request
+  a. CPU and context switching: high overhead as the number of requests grow in number, we will have lot of processes to manage. 
+  b. Memory usage: Memory consumption is considerably high as processes use their own memory spaces each.
+  c. waiting I/O: Every IO requests will be blocking the process up to the operations finishes up.
+
+1. One thread from a pool per request
+  a. CPU and context switching: Moderate in relative to One process per request design but still consumes a lot of cpu resources and needs tracking multiple threads. high overhead still.
+  b. Memory usage: better memory usage in relative to one process per request as threads share memory, but still increases memory consumption as requests grow. 
+  c. waiting I/O: blocking, if we have no more threads in pool the request will have to wait even with no thread named for it.
+
+1. Node.js event-loop-based handling
+  a. CPU and context switching - single threaded, small overhead as result of single execution thread.
+  b. Memory usage - memory usage is optimal as we have single thread in the app, almost predictable 
+  c. waiting I/O - no request blocking as every IO requests gets delegated to OS kernel by libuv so our execution thread is always ready to accept other requests.
+
+
+# Node.js relies on asynchronous, event driven pattern: when an asynchronous operation is initialized, the program passes callback function to handle the response later. To make this feature viable we need First class functions and closures.
+First class functions - allows passing functions as argument.
+Closures - hold the surrounding lexical state and variables at the exact moment the asynchronous call was made. Since the callback functions are executed long after the outer function has returned, closures keep the context for the callback.
+
+
+
+
+QUESTION 8 — Event-loop starvation and timers (5 points)
+
+The callback passed to setTimeout(fn, 1000) is described as running "after one
+second." Explain why this is a minimum-delay guarantee rather than an exact
+execution time. Define thread starvation, give one concrete cause of it, and
+explain what kind of workload Node.js is especially good at—and what kind can
+be problematic on its JavaScript thread.
+
+ANSWER:
+
+
+# The callback described as running after one second not exactly is the microseconds value stated is minimum time because of the nature of event loop in asynchronous operations. The moment the time stated is elabsed we may have other tasks actively in call stack which may block the execution the ready callback queued by event loop.
+
+# Thread starvation is defined as Node.js execution thread being blocked by CPU bound synchronous operation, disabling event loop from progressing to process pending IO callbacks, timer events and incoming network requests.
+
+# concrete cause that would end up in thread starvation is running heavy synchronous computation on the main thread like recursive Fibonacci calculations.
+
+Workload types optimal and problematic
+
+Problematic workloads - synchronous cpu bound operations which would block the main thread from processing other subsequent operations.
+Optimal workload - IO bound, highly concurrent operations would be best suits as we have single threaded and libuv backend asynchronous feature in Node.js.
+
+
+
+QUESTION 9 — Loading, caching, and module state (6 points)
+
+Explain all of the following:
+
+a. why the first CommonJS require call is synchronous/blocking;
+b. what Node.js caches and what a later require resolving to the same file
+   returns;
+c. how caching can create shared mutable state between importing modules;
+d. how an exported factory function can provide independent objects instead;
+e. why conditional/lazy loading with require is possible.
+
+ANSWER:
+
+a. The first require call is synchronous because we need to load, execute and make the module available in the code before we try to use that module in the code.
+b. Module exports are cached the first time the module is required in other module, Later any require referring to the same the module as cached one gets the cached module from require.cache.
+c. Every first require calls to modules store the executed module.exports value into require.cache, thus we have global cache to have our mutable state.
+d. Factory function can be exported from a module, the function returns object literal at time of execution. So we export the function that will later return the object literals.
+e. require is standard commonjs module unlike static module top level static import statements; thus we can use it in conditional statements like if statement.
+
+
+
+
+QUESTION 10 — Filesystem APIs and asynchronous errors (4 points)
+
+Compare synchronous and asynchronous fs operations in a busy server. Explain
+why a try/catch surrounding the call that schedules an asynchronous operation
+does not catch an error later thrown by its callback. State the Node.js
+error-first callback convention for both failure and success.
+
+ANSWER:
+
+# Synchronous fs operations block the main thread while waiting for slow IO (disk) operation to complete. In busy server this would entirely stop event loop from accepting any new requests. Asynchronous fs offloads the disk IO to libuv worker threads and leaves event loop to handle other requests.
+
+# Try catch finishes executing before the async operations get executed. The async operation schedules the IO task and immediately finishes, the try/catch gets executed and gets removed from call stack, long after try/catch the disk operations finishes and places its callback into event queue,  when the event loop later executes the callback there is no active try/catch.
+
+# here is how error first call back convention for both failure and success; every callback is passed error as first argument and data as second, so in order to find out if error has occurred we check if the first argument is null or undefined. If first argument is null or undefined it means the operation was successful!
+
+
+
+
+QUESTION 11 — CommonJS, AMD, and Browserify (3 points)
+
+Why is CommonJS's loading style acceptable during server startup but poorly
+suited to loading many modules directly in a browser? Explain how AMD addresses
+the browser's latency problem. What does Browserify accomplish, and name one
+kind of Node.js module it cannot meaningfully make work in a browser.
+
+ANSWER:
+
+# At server to load modules we only need to make disk IO which way faster than network call, we can safely require modules in server since we load each module from disk storage directly. But in browser we need to make network call to require each module synchronously, which would freeze the browser while loading with that big latency.
+
+# Asynchronous module definition wraps modules inside a callback wrapper function - define ( ['dep1','dep2'], function (dep1, dep2){...}). This enables browsers to load multiple modules over the network without blocking the main execution thread or freezing the UI while dependencies are being fetched.
+
+# Role of Browserify 
+Browserify is build time bundler. It traces require()  calls starting from an entry file, packages all commonjs modules and their dependencies into a single browser compatible javascript bundle file and provides client side polyfills for core Node.js modules.
+
+# Unsupported modules
+browserify can not meaningfully adapt modules that depend on native system level apis or OS hardware access such as fs and os.
+
+
+
+======================================================================
+SECTION C — CODE READING, OUTPUT, AND DEBUGGING (25 POINTS)
+======================================================================
+
+Do not run any code in this section. For each question, write the exact output
+in order, state whether the process throws or exits abnormally when relevant,
+and explain the mechanism that produces the result.
+
+
+QUESTION 12 — Closure and asynchronous callbacks (5 points)
+
+What is printed, and why?
+
+    function makeReporter(label) {
+        var count = 0;
+        return function () {
+            count = count + 1;
+            console.log(label + ':' + count);
+        };
+    }
+
+    var alpha = makeReporter('A');
+    var beta = makeReporter('B');
+
+    setTimeout(alpha, 0);
+    alpha();
+    beta();
+    setTimeout(beta, 0);
+    console.log('scheduled');
+
+ANSWER:
+
+A:1
+B:1
+scheduled
+A:2
+B:2
+
+-> Explanation:
+
+Independent Closures:
+Calling makeReporter('A') and makeReporter('B') creates two separate closure instances in memory. Each returned function retains access to its own distinct count variable within its lexical environment. As a result, alpha and beta increment their own separate counters independently.
+
+Synchronous vs. Asynchronous Execution Order:
+
+All synchronous code executes first on the call stack before any timer callbacks can run:
+
+alpha() increments alpha's count to 1 and logs A:1.
+
+beta() increments beta's count to 1 and logs B:1.
+
+console.log('scheduled') logs scheduled.
+
+Even though setTimeout(..., 0) specifies a delay of 0 ms, its callback is placed into the event loop's timers queue. The event loop can only process queued callbacks once the synchronous call stack is completely empty.
+
+Once the main thread finishes executing the synchronous code, the event loop runs the queued callbacks in order:
+
+The queued alpha callback increments alpha's counter to 2 and logs A:2.
+
+The queued beta callback increments beta's counter to 2 and logs B:2.
+
+
+QUESTION 13 — this, new, and prototypes (5 points)
+
+What is printed, and why?
+
+    function Meter(name) {
+        this.name = name;
+        this.value = 1;
+    }
+
+    Meter.prototype.value = 50;
+    Meter.prototype.increment = function () {
+        this.value = this.value + 1;
+        return this.value;
+    };
+
+    var left = new Meter('left');
+    var right = new Meter('right');
+
+    delete right.value;
+    console.log(left.increment());
+    console.log(right.value);
+    Meter.prototype.value = 80;
+    console.log(right.increment());
+    console.log(left.value);
+    console.log(right.value);
+
+ANSWER:
+
+2   // since we have have object level override of value to be one in left object initialization and apply the increment to that 1, we get 2.
+50  // we have deleted the value property from right so we access the assigned value to the value property of the prototype.
+81  // we updated the prototype's value property to be 80 so the new right.increment increments the new prototype value as we have no shadowing variable in the object itself.
+2   // we still have that value we updated earlier.
+81  // right value property is still 81 since we had no operations made after the increment made lately.
+
+
+
+QUESTION 14 — The exports alias (4 points)
+
+Given these files, what values do x and y receive? Explain why they differ.
+Then correct broken.js so it exports the intended object.
+
+    // working.js
+    exports.status = 'ready';
+
+    // broken.js
+    exports = { status: 'ready' };
+
+    // app.js
+    var x = require('./working');
+    var y = require('./broken');
+    console.log(x);
+    console.log(y);
+
+ANSWER:
+`exports` initially references the same object as `module.exports`.
+
+In working.js, `exports.status = 'ready'` mutates that shared
+object, so require() returns { status: 'ready' }.
+
+In broken.js, `exports = { status: 'ready' }` only reassigns the
+local exports variable. It does not change module.exports.
+Since require() returns module.exports, the result remains {}.
+
+here is the correction 
+
+//broken.js
+exports.status = 'ready';
+
+or:
+
+module.exports = { status: 'ready' };
+
+the consoles will print 
+{ status : 'ready' }
+{}
+
+
+
+
+
+
+QUESTION 15 — Resolution, caching, and shared state (4 points)
+
+Assume the following files are in one directory:
+
+    // counter.js
+    console.log('counter loaded');
+    module.exports = { value: 0 };
+
+    // worker.js
+    var counter = require('./counter');
+    counter.value = counter.value + 5;
+
+    // app.js
+    var first = require('./counter');
+    first.value = 2;
+    require('./worker');
+    var second = require('./counter');
+    console.log(first === second);
+    console.log(second.value);
+
+Write the exact output in order. State how many times counter.js executes and
+explain every line of output.
+
+ANSWER:
+
+counter loaded // require function in worker.js executes the module
+true // we have set the cached counter module export object with property value to have that property to be updated to 2 then again we executed work module which adds up 5 to the property.
+7 // we have seven, first we had 0, then 5 (counter.value = counter.value + 5; ), then 2 - ( first.value = 2; ), then 7 - require('./worker'); done! 
+
+
+// counter.js executes exactly once only!
+
+
+
+
+
+QUESTION 16 — Asynchronous exceptions and event-loop order (4 points)
+
+What happens when this program runs? Include all output that appears before any
+uncaught error and explain why the catch block behaves as it does. Then describe
+the smallest structural change that would allow this specific thrown error to
+be caught.
+
+    try {
+        process.nextTick(function () {
+            console.log('tick');
+            throw new Error('boom');
+        });
+        console.log('scheduled');
+    }
+    catch (error) {
+        console.log('caught:', error.message);
+    }
+
+    console.log('end');
+
+
+
+ANSWER:
+
+The output:
+
+Scheduled
+end
+tick
+
+-> The try catch block will be done and out of current call stack by the time the asynchronous operation completes. As result the error thrown will not be handled unless we explicitly put the try catch inside the callback function. Here is the structural change that would make the code behave well! 
+
+process.nextTick( function () {
+try {
+    console.log('tick');
+    throw new Error('boom');
+} catch ( error) {
+    console.log('caught: ', error.message);
+}
+});
+console.log('scheduled');
+console.log('end');
+
+
+
+
+
+
+
+QUESTION 17 — Package entry point and version range (3 points)
+
+Project structure:
+
+    project/
+      app.js
+      node_modules/
+        compass/
+          package.json
+          index.js
+          lib/
+            start.js
+
+compass/package.json contains:
+
+    {
+      "name": "compass",
+      "version": "2.3.4",
+      "main": "./lib/start.js"
+    }
+
+app.js contains:
+
+    var compass = require('compass');
+
+a. Which JavaScript file does require load, and why is index.js not selected?
+b. If an application's dependency is "compass": "^2.3.4", classify each of
+   these versions as allowed or not allowed under the Chapter 4 rules:
+
+       2.3.9     2.8.0     3.0.0
+
+ANSWER:
+
+
+a. the require function loads the start.js since we have the main property set to point to this file in package.json. This automatically leaves index.js not to be the entry file.
+b. 2.3.9 - allowed, 2.8.0 - allowed and 3.0.0 is not allowed. ^2.3.4 means we are fine with range 2.3.4 up to 2.9.9
+
+
+
+
+
+
+
+======================================================================
+SECTION D — PRACTICAL DESIGN AND APPLICATION (20 POINTS)
+======================================================================
+
+QUESTION 18 — Dependency layout for incompatible versions (6 points)
+
+A project contains reportA and reportB. Both use a package named formatter.
+reportA requires formatter version 1, while reportB requires an incompatible
+formatter version 2. Design a directory tree using node_modules so both reports
+can work in the same Node.js process without changing their require('formatter')
+calls. For each report, trace the directories Node.js searches and identify the
+copy it selects. Explain why the two modules do not share formatter's cached
+state.
+
+ANSWER:
+app/
+├── node_modules/
+│   ├── reportA/
+│   │   ├── index.js
+│   │   └── node_modules/
+│   │       └── formatter/       # v1
+│   │
+│   └── reportB/
+│       ├── index.js
+│       └── node_modules/
+│           └── formatter/       # v2
+└── app.js
+
+# reportA finds formater in its own node_modules and report finds formater in its own node_modules as well. Since require caches module exports based on the file path resolved, the two require calls resolve to different directory paths they will be cached as distinct modules.
+
+
+
+
+QUESTION 19 — Design a maintainable command-line utility (8 points)
+
+Design a small command-line program named inspect-config. It receives a JSON
+configuration file path as a positional command-line argument and supports a
+-v flag for verbose output. It must read the file without blocking the event
+loop, parse the JSON, and report filesystem or JSON errors without crashing.
+
+Provide:
+
+a. a small directory/file structure;
+b. the relevant package.json fields and dependency entry or entries;
+c. the npm commands needed to initialize the project and save any dependency;
+d. CommonJS-style pseudocode or JavaScript showing module boundaries, argument
+   handling, asynchronous file reading, JSON parsing, and error handling;
+e. a brief explanation of why your design is appropriate for Node.js.
+
+You may use the Chapter 4 command-line argument package or process.argv, but be
+consistent and precise.
+
+ANSWER:
+
+a.
+inspect-config/
+├── package.json
+└── inspect-config.js
+b.
+package.json
+
+{
+"name":"inspect-config",
+"version":"1.0.0",
+"main":"inspect-config.js",
+"engines": {"node":">=18"},
+"dependencies": {}
+}
+
+c. 
+
+command to install and save dependencies into the package file is this one; <npm install --save> since we have the package.json configured manually we skip the command <npm init -y>.
+
+d.
+
+// /inspect-config.js
+
+const fs = require('fs');
+const argv = process.argv;
+
+const jsonFilePath = argv[2];
+const verbose  = argv.includes('-v');
+
+
+if(!jsonFilePath) {
+	console.error('Usage: node inspect-config.js json_file_path <-v if verbose>');
+	process.exitCode = 1;
+	return;
+}
+
+if(verbose) console.log(`Reading configuration from ${jsonFilePath}`);
+
+
+fs.readFile(jsonFilePath, 'utf8', (err, data) => {
+	let parsed;
+	if ( err ) {
+		console.log("Error reading file content");
+		process.exitCode = 1;
+ 		return 
+	}
+	try{
+	  parsed = JSON.parse(data);
+	} catch (err) {
+	  console.error(`JSON error: ${err.message}`);
+	  process.exitCode = 1;
+	  return;
+	}
+
+	if (verbose) {
+        console.log('Configuration loaded successfully.');
+    }
+
+    console.log(parsed);
+	
+});
+
+e. 
+The design is clean 
+1. Used process.argv to handle command line arguments and flages with no need of external libraries.
+2. Used includes property of arrays to precisely get the -v flag value rather than fixed array index, thus accurate.
+3. Used aync file readig so that we don't block the main thread while accessing the filesystem.
+4. Managed to catch both fs and json parsing errors separetedly, more clean to read and debug.
+
+
+QUESTION 20 — Package maintenance and risk analysis (6 points)
+
+You inherit an application with this dependency declaration:
+
+    "dependencies": {
+        "display-kit": "~1.4.2"
+    }
+
+The registry contains versions 1.4.3, 1.5.0, and 2.0.0. The installed package
+also modifies String.prototype when it is required.
+
+a. Under the Chapter 4 semantic-version rules, which available versions satisfy
+   ~1.4.2? Explain. (2 points)
+b. State the npm command that checks installed dependencies against available
+   versions, and explain the meanings of Current, Wanted, and Latest. (2 points)
+c. Analyze two maintainability risks of a package modifying String.prototype.
+   State two precautions you would take before upgrading or using it throughout
+   the application. (2 points)
+
+ANSWER:
+
+a. only 1.4.3 satisfies semantic version rule for ~1.4.2 as the tilde indicates that the dependency is fine as long as we upgrade patch versions and not minor or major versions.
+
+b. the npm command that checks installed dependencies against available versions is npm outdated, 
+- current - what we have in our project
+- wanted - most latest compatible version of the package
+- latest - latest available version available in Node.js Registry.
+
+c.
+Here down are 2 maintainability risks manipulating package string.prototype would result in;
+ 1. lets say the package does this - String.prototype.foo = function () {//some code} . Every string in the application gets this function foo(). This can cause unexpected behavior, naming collisions with an other library/future JavaScript features and difficult to trace side effects.
+ 2. Hidden coupling. The application become dependent on the modified form of String. Future upgrade or removal of the package can silently break unrelated code that uses those added new properties.
+
+Two precautions I would take before upgrading are;
+1. Check the properties that are being added to string prototype and how it works.
+2. Search the entire application for usage of the package-added prototype methods, and test the application before/after the upgrade for compatibility and collisions.
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================================
+END OF EXAMINATION
+======================================================================
+
+Before submitting, verify that every question has an answer or explicitly says
+"I don't know." Save this file without consulting any external material.
+
+Examiner use only:
+
+Section A: ______ / 30
+Section B: ______ / 25
+Section C: ______ / 25
+Section D: ______ / 20
+
+Total:     ______ / 100
+Result:    PASS / NOT YET MASTERED
+Critical weaknesses present: YES / NO
+

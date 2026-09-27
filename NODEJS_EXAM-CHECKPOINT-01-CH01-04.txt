@@ -1,0 +1,655 @@
+BEGINNING NODE.JS — CHECKPOINT EXAMINATION 01
+Coverage: Chapters 1–4
+Primary assessed unit: Chapters 2–4 (Chapter 1 is introductory context)
+Total: 100 points
+Suggested time: 120 minutes
+Mastery threshold: 90%, with no unresolved critical weakness
+
+Learner name: ________________________________________________
+Date started: _________________________________________________
+Date completed: _______________________________________________
+
+
+EXAMINATION CONDITIONS
+
+This is a closed-book examination. While answering:
+
+1. Do not use the book, notes, internet, AI, IDE autocomplete, Node.js runtime,
+   REPL, debugger, or external solutions.
+2. Use only this plain-text file and a plain-text editor.
+3. Answer from memory and in your own words.
+4. Explain why, not only what. For every output question, show your reasoning.
+5. If you are unsure, write "I don't know" rather than guessing.
+6. Do not request or receive hints while the examination is in progress.
+7. Do not alter the questions or point values. Type only in the answer spaces.
+
+Declaration: I completed this examination under the conditions above.
+
+Signature or initials: _________________________________________
+
+
+======================================================================
+SECTION A — FOUNDATIONAL CONCEPTS AND TERMINOLOGY (30 POINTS)
+======================================================================
+
+QUESTION 1 — Development basics (4 points)
+
+a. What does REPL stand for, and what is its purpose? (2 points)
+b. State the commands used to start the Node.js REPL and to execute a script
+   named app.js from a terminal. (2 points)
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+QUESTION 2 — Functions and closures (6 points)
+
+Define each of the following and explain how they relate to one another:
+
+a. first-class function;
+b. higher-order function;
+c. callback;
+d. closure.
+
+Your explanation must include why first-class functions and closures are useful
+for asynchronous Node.js programs.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 3 — Values, equality, and Boolean contexts (5 points)
+
+Explain the differences among undefined, null, and an undeclared/nonexistent
+object property. Then:
+
+a. distinguish == from ===;
+b. list the important falsy values covered in Chapter 2;
+c. state whether empty arrays and empty object literals are truthy or falsy.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 4 — CommonJS module fundamentals (5 points)
+
+Name the three kinds of modules described in Chapters 3–4. Then explain the
+roles of each of the following in the CommonJS system:
+
+    require
+    module
+    module.exports
+    exports
+
+Include the default value exported by a newly loaded JavaScript module.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 5 — Node.js globals and core facilities (4 points)
+
+Briefly state the purpose of each item:
+
+    __filename
+    __dirname
+    process.argv
+    Buffer
+
+For process.argv, identify what its first two elements represent.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 6 — JSON, package.json, and semantic versioning (6 points)
+
+a. Give three restrictions that distinguish valid JSON from a general
+   JavaScript object literal. (2 points)
+b. Explain what JSON.stringify and JSON.parse do. (1 point)
+c. Explain the purpose of package.json when consuming packages. (1 point)
+d. In a semantic version X.Y.Z, explain when X, Y, and Z change. (2 points)
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================================
+SECTION B — MECHANISMS AND TRADE-OFFS (25 POINTS)
+======================================================================
+
+QUESTION 7 — The I/O scaling problem (7 points)
+
+Explain the I/O scaling problem and compare these three server designs:
+
+    one process per request
+    one thread from a pool per request
+    Node.js event-loop-based request handling
+
+Discuss CPU use, memory use, waiting for I/O, and context-switching overhead.
+Conclude by explaining why JavaScript's first-class functions and closures make
+it suitable for Node.js's approach.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 8 — Event-loop starvation and timers (5 points)
+
+The callback passed to setTimeout(fn, 1000) is described as running "after one
+second." Explain why this is a minimum-delay guarantee rather than an exact
+execution time. Define thread starvation, give one concrete cause of it, and
+explain what kind of workload Node.js is especially good at—and what kind can
+be problematic on its JavaScript thread.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 9 — Loading, caching, and module state (6 points)
+
+Explain all of the following:
+
+a. why the first CommonJS require call is synchronous/blocking;
+b. what Node.js caches and what a later require resolving to the same file
+   returns;
+c. how caching can create shared mutable state between importing modules;
+d. how an exported factory function can provide independent objects instead;
+e. why conditional/lazy loading with require is possible.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 10 — Filesystem APIs and asynchronous errors (4 points)
+
+Compare synchronous and asynchronous fs operations in a busy server. Explain
+why a try/catch surrounding the call that schedules an asynchronous operation
+does not catch an error later thrown by its callback. State the Node.js
+error-first callback convention for both failure and success.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 11 — CommonJS, AMD, and Browserify (3 points)
+
+Why is CommonJS's loading style acceptable during server startup but poorly
+suited to loading many modules directly in a browser? Explain how AMD addresses
+the browser's latency problem. What does Browserify accomplish, and name one
+kind of Node.js module it cannot meaningfully make work in a browser.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+======================================================================
+SECTION C — CODE READING, OUTPUT, AND DEBUGGING (25 POINTS)
+======================================================================
+
+Do not run any code in this section. For each question, write the exact output
+in order, state whether the process throws or exits abnormally when relevant,
+and explain the mechanism that produces the result.
+
+
+QUESTION 12 — Closure and asynchronous callbacks (5 points)
+
+What is printed, and why?
+
+    function makeReporter(label) {
+        var count = 0;
+        return function () {
+            count = count + 1;
+            console.log(label + ':' + count);
+        };
+    }
+
+    var alpha = makeReporter('A');
+    var beta = makeReporter('B');
+
+    setTimeout(alpha, 0);
+    alpha();
+    beta();
+    setTimeout(beta, 0);
+    console.log('scheduled');
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 13 — this, new, and prototypes (5 points)
+
+What is printed, and why?
+
+    function Meter(name) {
+        this.name = name;
+        this.value = 1;
+    }
+
+    Meter.prototype.value = 50;
+    Meter.prototype.increment = function () {
+        this.value = this.value + 1;
+        return this.value;
+    };
+
+    var left = new Meter('left');
+    var right = new Meter('right');
+
+    delete right.value;
+    console.log(left.increment());
+    console.log(right.value);
+    Meter.prototype.value = 80;
+    console.log(right.increment());
+    console.log(left.value);
+    console.log(right.value);
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 14 — The exports alias (4 points)
+
+Given these files, what values do x and y receive? Explain why they differ.
+Then correct broken.js so it exports the intended object.
+
+    // working.js
+    exports.status = 'ready';
+
+    // broken.js
+    exports = { status: 'ready' };
+
+    // app.js
+    var x = require('./working');
+    var y = require('./broken');
+    console.log(x);
+    console.log(y);
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 15 — Resolution, caching, and shared state (4 points)
+
+Assume the following files are in one directory:
+
+    // counter.js
+    console.log('counter loaded');
+    module.exports = { value: 0 };
+
+    // worker.js
+    var counter = require('./counter');
+    counter.value = counter.value + 5;
+
+    // app.js
+    var first = require('./counter');
+    first.value = 2;
+    require('./worker');
+    var second = require('./counter');
+    console.log(first === second);
+    console.log(second.value);
+
+Write the exact output in order. State how many times counter.js executes and
+explain every line of output.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 16 — Asynchronous exceptions and event-loop order (4 points)
+
+What happens when this program runs? Include all output that appears before any
+uncaught error and explain why the catch block behaves as it does. Then describe
+the smallest structural change that would allow this specific thrown error to
+be caught.
+
+    try {
+        process.nextTick(function () {
+            console.log('tick');
+            throw new Error('boom');
+        });
+        console.log('scheduled');
+    }
+    catch (error) {
+        console.log('caught:', error.message);
+    }
+
+    console.log('end');
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 17 — Package entry point and version range (3 points)
+
+Project structure:
+
+    project/
+      app.js
+      node_modules/
+        compass/
+          package.json
+          index.js
+          lib/
+            start.js
+
+compass/package.json contains:
+
+    {
+      "name": "compass",
+      "version": "2.3.4",
+      "main": "./lib/start.js"
+    }
+
+app.js contains:
+
+    var compass = require('compass');
+
+a. Which JavaScript file does require load, and why is index.js not selected?
+b. If an application's dependency is "compass": "^2.3.4", classify each of
+   these versions as allowed or not allowed under the Chapter 4 rules:
+
+       2.3.9     2.8.0     3.0.0
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+======================================================================
+SECTION D — PRACTICAL DESIGN AND APPLICATION (20 POINTS)
+======================================================================
+
+QUESTION 18 — Dependency layout for incompatible versions (6 points)
+
+A project contains reportA and reportB. Both use a package named formatter.
+reportA requires formatter version 1, while reportB requires an incompatible
+formatter version 2. Design a directory tree using node_modules so both reports
+can work in the same Node.js process without changing their require('formatter')
+calls. For each report, trace the directories Node.js searches and identify the
+copy it selects. Explain why the two modules do not share formatter's cached
+state.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 19 — Design a maintainable command-line utility (8 points)
+
+Design a small command-line program named inspect-config. It receives a JSON
+configuration file path as a positional command-line argument and supports a
+-v flag for verbose output. It must read the file without blocking the event
+loop, parse the JSON, and report filesystem or JSON errors without crashing.
+
+Provide:
+
+a. a small directory/file structure;
+b. the relevant package.json fields and dependency entry or entries;
+c. the npm commands needed to initialize the project and save any dependency;
+d. CommonJS-style pseudocode or JavaScript showing module boundaries, argument
+   handling, asynchronous file reading, JSON parsing, and error handling;
+e. a brief explanation of why your design is appropriate for Node.js.
+
+You may use the Chapter 4 command-line argument package or process.argv, but be
+consistent and precise.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTION 20 — Package maintenance and risk analysis (6 points)
+
+You inherit an application with this dependency declaration:
+
+    "dependencies": {
+        "display-kit": "~1.4.2"
+    }
+
+The registry contains versions 1.4.3, 1.5.0, and 2.0.0. The installed package
+also modifies String.prototype when it is required.
+
+a. Under the Chapter 4 semantic-version rules, which available versions satisfy
+   ~1.4.2? Explain. (2 points)
+b. State the npm command that checks installed dependencies against available
+   versions, and explain the meanings of Current, Wanted, and Latest. (2 points)
+c. Analyze two maintainability risks of a package modifying String.prototype.
+   State two precautions you would take before upgrading or using it throughout
+   the application. (2 points)
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================================
+END OF EXAMINATION
+======================================================================
+
+Before submitting, verify that every question has an answer or explicitly says
+"I don't know." Save this file without consulting any external material.
+
+Examiner use only:
+
+Section A: ______ / 30
+Section B: ______ / 25
+Section C: ______ / 25
+Section D: ______ / 20
+
+Total:     ______ / 100
+Result:    PASS / NOT YET MASTERED
+Critical weaknesses present: YES / NO
+

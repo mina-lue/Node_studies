@@ -1,0 +1,11 @@
+# The book and supplied reference material remain local-only.
+Beginning_NodeJs_-_Basarat_Syed.pdf
+Beginning_NodeJS_Master_Companion_Chapter1.pdf
+Beginning-NodeJS-Checkpoint-01-Ch1-4.txt
+
+# Local editor and OS files.
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store

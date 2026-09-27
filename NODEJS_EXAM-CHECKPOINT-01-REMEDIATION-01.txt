@@ -1,0 +1,254 @@
+BEGINNING NODE.JS - CHECKPOINT 01 REMEDIATION AND TRANSFER
+Coverage: Chapters 2-4
+Total: 100 points
+Suggested time: 90 minutes
+Issued: 2026-09-27
+Mastery requires at least 90/100 and resolution of W01 and W02.
+
+Learner name:
+Date started:
+Date completed:
+This is a closed-book examination. Use only this file and a plain-text editor.
+Do not use the book, notes, internet, AI, Node.js runtime, REPL, debugger.
+Use no external solutions. Answer from memory in your own words.
+For code questions, give exact output and explain execution order.
+If unsure, write I do not know. No hints are available during the exam.
+
+Declaration: I completed this examination under the conditions above.
+Signature or initials:
+
+======================================================================
+PART I - FOCUSED REMEDIATION (46 POINTS)
+======================================================================
+QUESTION 1 - Closure model (8 points)
+
+Explain what a closure retains when it refers to a variable declared in an
+outer function. Does it retain a fixed copy of the value at the moment the
+callback was scheduled? What happens if the variable changes before the
+callback runs? Contrast this with two calls to the same factory.
+
+ANSWER:
+
+
+
+
+
+QUESTION 2 - Separate closures and later mutation (12 points)
+
+Without running this code, write every output line in order. Explain what
+value each function reads when it runs.
+
+    function makePair(start) {
+        var value = start;
+        return {
+            bump: function () { value += 3; },
+            report: function () { console.log(value); }
+        };
+    }
+
+    var first = makePair(1);
+    var second = makePair(10);
+    setTimeout(first.report, 0);
+    first.bump();
+    second.bump();
+    console.log('sync');
+    setTimeout(second.report, 0);
+    first.bump();
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 3 - Transfer: loop callbacks (10 points)
+
+Without running this code, write the exact output and explain why the three
+functions behave as they do.
+
+    var actions = [];
+    for (var i = 0; i < 3; i++) {
+        actions.push(function () { return i; });
+    }
+    console.log(actions[0](), actions[1](), actions[2]());
+
+Rewrite only the loop so the stored functions return 0, 1, and 2
+respectively. Explain why your change works.
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 4 - CommonJS execution and mutation trace (16 points)
+
+Assume these files are in one directory. Write exact output in order.
+Trace every require: first execution or cache hit, each mutation, and whether
+the three references on the final line refer to the same object.
+
+    // state.js
+    console.log('state:init');
+    module.exports = { count: 1 };
+
+    // adjust.js
+    console.log('adjust:start');
+    var state = require('./state');
+    state.count += 4;
+    console.log('adjust:end', state.count);
+    module.exports = state;
+
+    // app.js
+    var state = require('./state');
+    state.count *= 2;
+    var a = require('./adjust');
+    state.count += 3;
+    var b = require('./adjust');
+    console.log(state === a, a === b, state.count);
+
+ANSWER:
+
+
+
+
+
+
+======================================================================
+PART II - UNFAMILIAR TRANSFER QUESTIONS (54 POINTS)
+======================================================================
+
+QUESTION 5 - Cache versus factory objects (14 points)
+
+Assume these files are in one directory. Give exact output and explain
+how many times factory.js executes, what is cached, and whether the returned
+objects share state.
+
+    // factory.js
+    console.log('factory loaded');
+    module.exports = function (initial) {
+        return { total: initial };
+    };
+
+    // app.js
+    var create = require('./factory');
+    var left = create(2);
+    var right = create(2);
+    left.total += 3;
+    var again = require('./factory');
+    console.log(create === again);
+    console.log(left === right);
+    console.log(left.total, right.total);
+
+Then describe one change to factory.js that would make two importers share
+one mutable exported object.
+
+ANSWER:
+
+
+
+
+
+
+
+QUESTION 6 - Next-tick output and failure (10 points)
+
+Without running this code, list all console output before any error report,
+using exact capitalization and order. State whether outer prints, whether
+the process exits normally, and why.
+
+    try {
+        process.nextTick(function () {
+            console.log('later');
+            throw new Error('stop');
+        });
+        console.log('before');
+    } catch (error) {
+        console.log('outer', error.message);
+    }
+    console.log('after');
+
+ANSWER:
+
+
+
+
+
+
+
+QUESTION 7 - Handling the next-tick failure (10 points)
+
+Rewrite the program from Question 6 with the smallest structural change
+needed to catch that specific thrown error. Retain the two synchronous
+log statements and print a line beginning with handled when the error is
+caught. State the exact console output of your revised program and explain
+where the catch must be active.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+QUESTION 8 - Transfer: command-line JSON inspector (20 points)
+
+Design a command named inspect-settings. It accepts exactly one JSON file
+path and an optional -v flag. Both invocations must work:
+
+    inspect-settings -v settings.json
+    inspect-settings settings.json -v
+
+It must read the file asynchronously, parse JSON, report missing or extra
+arguments and filesystem or JSON errors without an uncaught exception, and
+set a nonzero exit code on failure.
+
+Provide:
+ a. a small directory tree with separate CommonJS CLI and loader modules;
+ b. relevant package.json fields, including how the installed command
+    gets its name and any dependencies you choose;
+ c. valid npm commands needed for the setup you chose;
+ d. JavaScript or precise pseudocode for parsing, exports and requires,
+    async reading, JSON parsing, success output, and all failure paths;
+ e. a short explanation of why both flag orders work and why reading
+    does not block the event loop.
+
+ANSWER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================================
+END OF ASSESSMENT
+======================================================================
+
+Before submission, answer every question or explicitly state uncertainty.
+Save this file and tell the examiner when it is complete. Do not request
+hints during the examination.
+
+Examiner use only:
+Q1: ____ / 8       Q2: ____ / 12      Q3: ____ / 10
+Q4: ____ / 16      Q5: ____ / 14      Q6: ____ / 10
+Q7: ____ / 10      Q8: ____ / 20
+Total: ____ / 100
+W01 mastered: YES / NO
+W02 mastered: YES / NO
+Result: MASTERED / NOT YET MASTERED
