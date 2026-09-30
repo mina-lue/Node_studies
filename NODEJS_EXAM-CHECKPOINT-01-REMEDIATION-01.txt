@@ -28,9 +28,10 @@ callback was scheduled? What happens if the variable changes before the
 callback runs? Contrast this with two calls to the same factory.
 
 ANSWER:
-
-
-
+Closures retain access to the outer variable itself not fixed value of 
+the variable, if there is change to the value of the variable before the 
+callback runs, the callback gets the updated value of the variable. For 
+each invocation of factory we have separate state and variables.
 
 
 QUESTION 2 - Separate closures and later mutation (12 points)
@@ -57,6 +58,27 @@ value each function reads when it runs.
 
 ANSWER:
 
+sync - this is the first synchronous call, executed with no waiting.
+7    - first bump call to first object makes the value variable to be 4 and the second makes it 7.
+13   - we have the second object property value incremented by 3 once only.
+
+// the synchronous calls first get executed and asynchronous calls get 
+executed after waiting for event loop cycle.
+
+
+    var first = makePair(1); - creates first object with property value:1
+    var second = makePair(10); - creates second object with property value:10
+    setTimeout(first.report, 0); - registers callback report member of first object.
+    first.bump(); - reads teh value to be 1 and increments it with 3 making it 4.
+    second.bump(); - reads the value to be 10 and increments it to 13.
+    console.log('sync'); - prints string 'sync' .
+    setTimeout(second.report, 0); - registers callback report member of second object.
+    first.bump(); - increments value property of object first to 7 from 4.
+
+// the registered callbacks run after waiting for event loop cycle and gets to call
+stack after all synchronous calls are done so each callbacks will read the latest 
+variable values because of closures keeping the state.
+
 
 
 
@@ -77,8 +99,17 @@ Rewrite only the loop so the stored functions return 0, 1, and 2
 respectively. Explain why your change works.
 
 ANSWER:
+ 3 3 3 - because our closure would keep the variable i and final update of i is 3.
+ 
+var actions = [];
+    for (var i = 0; i < 3; i++) {
+	const value = i;
+        actions.push(function () { return value; });
+    }
+    console.log(actions[0](), actions[1](), actions[2]());
 
-
+This would create new bindings per iteration, so the instant value of i gets 
+stored instead of i which is getting updated at each iteration. 
 
 
 
@@ -109,8 +140,22 @@ the three references on the final line refer to the same object.
     console.log(state === a, a === b, state.count);
 
 ANSWER:
+state:init
+adjust:start
+adjust:end 6
+true true 9
 
-
+The first require to status var state = require('./state'); executes and caches { count:1 } for state export.
+state.count *= 2; - updates the shared state export to have { count:2 }
+var a = require('./adjust'); executes the file adjust.js and caches the export value.
+   -> console logs adjust:start
+   -> var state = require('./state'); gets the cached object { count:2 } for variable state.
+   -> state.count += 4; updates the state export cache to be { count:6 }
+   -> console.log('adjust:end', state.count); console prints adjust:end and 6
+   -> module.exports = state; the cached state value is assigned to the export of adjust and the value gets cached.
+state.count += 3 - makes the shared sate.count to be 9.
+var b = require('./adjust') resolves to the same cache as variable a is pointing to.
+console.log(state === a, a === b, state.count) - state refers to the cache of file state.js while a and b both refer to cache of adjust file, which in turn refers to the same object as state exports. so we have then true true 9
 
 
 
@@ -145,11 +190,23 @@ Then describe one change to factory.js that would make two importers share
 one mutable exported object.
 
 ANSWER:
+# output
+factory loaded
+true
+false
+5 2
 
+# The file factory.js gets executed exactly once only.
+# Function (x) => {return { total: x}} is cached.
+# The returned object ( function ) itself is the same but executed returns 
+does not share state, every time the function is executed it creates new instances.
+# To make the factory.js to have mutable objects exported we should assign the 
+module.exports directly the object and have setters if we have to have almost
+the same functionality to update variable by passing argument.
 
-
-
-
+for instance module.exports = {
+total:0
+}
 
 
 QUESTION 6 - Next-tick output and failure (10 points)
@@ -171,8 +228,17 @@ the process exits normally, and why.
 
 ANSWER:
 
+# output
+before
+after
+later
+Error: stop
 
+# The callback executes later, outside of try block. try/catch only catches
+exceptions thrown synchronously while protected code is executing.
 
+# The error is uncaught, so the process terminates with an error rather
+than exiting normally.
 
 
 
@@ -187,8 +253,33 @@ where the catch must be active.
 
 ANSWER:
 
+# Code rewrite
 
 
+try {
+        process.nextTick(function () {
+	    try{
+            console.log('later');
+            throw new Error('stop');
+	    }catch (error) {
+		console.log('handled stop error');
+	    }
+        });
+        console.log('before');
+    } catch (error) {
+        console.log('outer', error.message);
+    }
+    console.log('after');
+
+# output of the rewritten code
+before
+after
+later
+handled stop error
+
+# try catch statement should surround the code it protects. Callbacks get 
+executed later, in our case we need to add the try catch to the code part
+being protected to make sure that we have the protection at execution time.
 
 
 
@@ -219,14 +310,112 @@ Provide:
 
 ANSWER:
 
+a.
+my-cli-tool/
+|
+|_bin/
+|  |_cli.js
+|
+|_lib/
+|  |_inspect.js
+|_package.json
+
+b.
+{
+"name":"my-cli-tool",
+"version":"1.0.0",
+"main":"lib/inspect.js",
+"engines":{"node":">=18"},
+"dependencies": {},
+"bin":{"inspect-settings":"./bin/cli.js"}
+}
+
+c. cd my-cli-tool
+   npm link
+
+d.
+
+# bin/cli.js
+
+#!/usr/bin/env node
+
+const inspect = require('../lib/inspect');
+
+// Process CLI arguments (ignoring node and script path)
+const args = process.argv.slice(2);
+
+inspect(args);
+
+# lib/inspect.js
+
+const fs = require('fs');
+function inspectSettings(args) { 
+let isVerbose = false;
+let filePath = null;
+let extraArgs = [];
+
+for( let i =0; i < args.length; i++) {
+	const arg = args[i];
+	if(arg === "-v") {
+	isVerbose = true;
+	} else if (!filePath) {
+	filePath = arg;
+	} else {
+	extraArgs.push(arg);
+	}
+}
+
+if(!filePath) {
+	console.error('Error: Required JSON file path missing');
+	process.exitCode = 1;
+	return;
+}
+
+if(extraArgs.length > 0) {
+	console.error('Error: Unexpected extra arguments' + extraArgs.join(' '));
+	process.exitCode = 1;
+	return;
+}
 
 
+fs.readFile(filePath, 'utf8', function (err, data) {
+	if (err) {
+      		console.error('Filesystem Error: ' + err.message);
+      		process.exitCode = 1;
+      		return;
+    	}
+	try {
+      const settings = JSON.parse(data);
+
+      // Success Path
+      if (isVerbose) {
+        console.log('[VERBOSE] Successfully loaded file:', filePath);
+        console.log('[VERBOSE] Parsed settings content:', settings);
+      } else {
+        console.log(settings);
+      }
+    } catch (parseErr) {
+      // Error Path 4: JSON Syntax/Parsing error
+      console.error('JSON Error: File does not contain valid JSON.');
+      process.exitCode = 1;
+    }
+});
+
+}
+module.exports = inspectSettings;
 
 
+e. 
+# The parser iterates through every argument in process.argv.slice(2). It
+flags -v wherever it appears and assigns the first non-flag string to filePath.
+Consequently whether -v precedes or follows settings.json , both values are 
+correctly captured before validating positional argument.
 
-
-
-
+# fs.readFile offloads the IO operation to Node.js's underlying libuv thread
+pool. The main v8 JavaScript thread continues running without waiting for the 
+file to read. Once the operating system completes the file read, libuv places
+the callback function onto the Event Loop's callback queue, which executes 
+non-blockingly once the call stack clears.
 
 
 
