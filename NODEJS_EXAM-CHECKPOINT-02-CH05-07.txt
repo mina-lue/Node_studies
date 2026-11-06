@@ -1,0 +1,505 @@
+BEGINNING NODE.JS - CHECKPOINT EXAMINATION 02
+Coverage: Chapters 5-7
+  Chapter 5: Events and Streams
+  Chapter 6: Getting Started with HTTP
+  Chapter 7: Introducing Express
+Primary source: Beginning_NodeJs_-_Basarat_Syed.pdf, printed pages 91-163
+Date issued: 2026-11-06
+Total: 100 points
+Suggested time: 150 minutes; record actual time if you need longer.
+Mastery threshold: at least 90%, with no unresolved critical weakness,
+successful remediation where needed, and application to unfamiliar examples.
+
+Learner name: _______________________________________________________
+Date started: _______________________________________________________
+Date completed: _____________________________________________________
+Time spent: _________________________________________________________
+
+EXAMINATION CONDITIONS
+
+1. This is a closed-book examination. Use only this plain-text file and
+   a plain-text editor while answering.
+2. Do not use the book, notes, internet, AI, IDE autocomplete, Node.js runtime,
+   REPL, debugger, or external solutions. Write code without executing it.
+3. Answer from memory, in your own words. Explain why, not only what.
+4. For output questions, give exact output and explain execution order.
+   When an error occurs, state its cause and effect on execution. You do not
+   need to reproduce runtime-generated stack traces or version-specific text.
+5. If unsure, write "I don't know" for the relevant part rather than guessing.
+6. Do not request or receive hints or answers during the examination.
+7. Preserve all questions and point values. Type in the ANSWER spaces.
+8. Use the CommonJS and callback-based approach covered in these chapters.
+   Chapter-era Connect/Express APIs are acceptable in your written solutions;
+   equivalent later syntax is also acceptable if used consistently. You are
+   not being tested on migration to another framework version.
+9. Treat each code example as independent. Unless stated otherwise, there
+   are no additional listeners, middleware, requests, or error handlers.
+
+Declaration: I completed this examination under the conditions above.
+Signature or initials: _______________________________________________
+
+
+======================================================================
+SECTION A - FOUNDATIONAL CONCEPTS AND TERMINOLOGY (30 POINTS)
+======================================================================
+
+QUESTION 1 - Inheritance and property lookup (5 points)
+
+a. Explain how JavaScript looks up a property on an object, including when
+   the search stops. (2 points)
+b. In constructor-based inheritance, distinguish calling the parent
+   constructor from setting up the child's prototype chain. What does each
+   accomplish? (2 points)
+c. What relationship does instanceof test? (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 2 - Events and listener lifetime (5 points)
+
+a. Define EventEmitter, listener, and emitting an event. Explain how event
+   arguments reach listeners. (2 points)
+b. Distinguish on from once. If an event was emitted before a once listener
+   was registered, what does that listener observe? (1 point)
+c. Explain what is needed to remove a particular previously registered
+   listener. (1 point)
+d. A program repeatedly adds listeners to a long-lived emitter and receives
+   a listener-count warning. What does the warning mean, and does it prevent
+   the additional listeners from being registered? (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 3 - Streams (5 points)
+
+a. Distinguish Readable, Writable, Duplex, and Transform streams. Give one
+   suitable example of each. (3 points)
+b. What capabilities must the source and destination of pipe have? (1 point)
+c. For a custom Readable, name the method you implement and explain how it
+   supplies data and signals that there will be no more data. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 4 - HTTP messages and Node.js (5 points)
+
+a. Name three important pieces of information in an HTTP request and three
+   in an HTTP response. Distinguish their roles. (2 points)
+b. In a core http.createServer request handler, identify which of request
+   and response can be read from and which can be written to. Explain how a
+   request body becomes available to the handler. (1 point)
+c. Distinguish response.write from response.end. What happens to a request
+   whose handler never completes the response? (1 point)
+d. Distinguish Content-Type from Content-Encoding. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 5 - Middleware and routing vocabulary (5 points)
+
+a. Explain the roles of req, res, and next in ordinary Connect/Express
+   middleware. (1 point)
+b. Distinguish path-prefix middleware registered with app.use from a route
+   registered with app.get. Account for HTTP method and query strings.
+   (1 point)
+c. For POST /books/b7?format=short with a JSON request body, distinguish
+   req.params, req.query, and req.body. State what setup, if any, is needed
+   to make each available to the route. (2 points)
+d. What is an Express Router, and why would you mount one? (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 6 - Cookies (5 points)
+
+a. Describe the exchange that sets a cookie and sends it back on a later
+   request. Name the HTTP headers used in each direction. (1 point)
+b. Distinguish httpOnly and secure cookie options. (1 point)
+c. What protection does cookie signing provide? Does signing hide the cookie
+   value from the client? Explain. (2 points)
+d. Explain the purpose of maxAge and how a server asks the browser to clear
+   a cookie. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+======================================================================
+SECTION B - MECHANISMS AND TRADE-OFFS (25 POINTS)
+======================================================================
+
+QUESTION 7 - Designing a reusable event source (5 points)
+
+A Download object reports progress to a terminal display, a logger, and an
+optional statistics collector. These consumers are registered independently.
+
+a. Explain why events suit this interface and contrast this with a callback
+   supplied for one operation's completion. (2 points)
+b. Write a minimal Download constructor that inherits from EventEmitter,
+   plus a report(bytes) method that emits a progress event. Show one consumer
+   subscribing and one call to report. (2 points)
+c. Describe one listener-lifetime bug in a long-running application and a
+   concrete way to avoid it. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 8 - Streaming a large compressed response (5 points)
+
+A server must send a 600 MB log file to many clients. A colleague proposes
+reading the entire file into memory, compressing the entire result, and only
+then starting each response.
+
+a. Compare this approach with streaming in terms of time to first data and
+   memory use as concurrent clients increase. Avoid claiming streams use
+   zero memory. (2 points)
+b. Draw or describe the stream chain for compressing the file while sending
+   it. Identify each stage's stream type and write the pipe expression using
+   variables of your choice. (2 points)
+c. State the Content-Encoding for a gzip response, and explain whether the
+   original content's MIME type becomes a gzip MIME type simply because the
+   response is compressed. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 9 - HTTP framing and HTTPS (5 points)
+
+a. Explain why a streamed HTTP/1.1 response might use chunked transfer
+   encoding instead of a Content-Length header. What information does the
+   framing provide to the receiver? (2 points)
+b. A developer says, "Base64-encoding Basic authentication credentials makes
+   HTTP safe for passwords." Evaluate the claim and explain the role of
+   HTTPS. (1 point)
+c. Name the server credentials supplied when creating a Node.js HTTPS
+   server, distinguish what must remain secret from what is presented to
+   clients, and explain why a self-signed certificate can trigger a browser
+   trust warning. No commands or cryptographic algorithms are required.
+   (2 points)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 10 - Middleware control flow and errors (5 points)
+
+a. Explain what determines middleware execution order. Contrast calling
+   next(), calling next(err), and ending the response without calling next.
+   State whether ending a response also returns from the JavaScript function.
+   (2 points)
+b. Give an error-handling middleware's parameter list, explain where it
+   belongs relative to middleware whose errors it handles, and distinguish
+   client-facing error information from server-side diagnostics. (2 points)
+c. For static-file middleware, explain why using an absolute directory based
+   on __dirname can be preferable to a path based on the working directory.
+   (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 11 - Sessions and late completion (5 points)
+
+a. Explain where cookie-session stores session data and how req.session
+   relates to that data. Give two reasons to keep a cookie-based session
+   small and avoid putting confidential information in it. (2 points)
+b. A request times out after two seconds. A pending operation completes at
+   four seconds and its callback attempts to continue the middleware chain.
+   Explain the failure this can cause, whether the timeout automatically
+   cancels that operation, and how to stop late completion from producing
+   another response. Include the timeout-state property covered in the book.
+   (3 points)
+
+ANSWER:
+
+
+
+
+
+
+======================================================================
+SECTION C - CODE READING, DEBUGGING, AND OUTPUT (25 POINTS)
+======================================================================
+
+QUESTION 12 - Event order, once, and error (6 points)
+
+Assume no process-level exception handler is installed.
+
+var EventEmitter = require('events').EventEmitter;
+var bus = new EventEmitter();
+var total = 2;
+
+function add(value) {
+    total += value;
+    console.log('add ' + total);
+}
+
+bus.on('step', add);
+bus.once('step', function (value) {
+    console.log('once ' + value + ' ' + total);
+});
+
+console.log('start');
+bus.emit('step', 3);
+bus.removeListener('step', add);
+bus.emit('step', 4);
+console.log('finish ' + total);
+bus.emit('error', new Error('broken'));
+console.log('after error');
+
+a. Give the exact console.log output up to the error, in order. (3 points)
+b. Explain listener order, why the second step emission behaves as it does,
+   and whether the listeners run synchronously or are deferred. (2 points)
+c. Explain what the error emission does, whether 'after error' is printed,
+   and how the process terminates. Do not reproduce the stack trace. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 13 - Constructor calls and prototype methods (6 points)
+
+function Label(name) {
+    this.name = name;
+}
+Label.prototype.describe = function () {
+    return 'label:' + this.name;
+};
+
+function Parcel(name) {
+    Label.call(this, name);
+}
+Parcel.prototype = Object.create(Label.prototype);
+Parcel.prototype.describe = function () {
+    return Label.prototype.describe.call(this) + ':parcel';
+};
+
+var first = new Parcel('east');
+var second = new Parcel('west');
+first.name = 'north';
+
+console.log(first.describe());
+console.log(second.describe());
+console.log(first instanceof Parcel);
+console.log(first instanceof Label);
+console.log(first.constructor === Parcel);
+
+a. Give the five output lines. (3 points)
+b. Explain the property lookup and this binding used in first.describe(),
+   and why changing first.name affects or does not affect second. (2 points)
+c. Repair the constructor property while preserving inherited methods.
+   (1 point)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 14 - Mounted routes and error flow (7 points)
+
+Reason using the callback-based Express routing behavior in Chapter 7.
+Consider one GET /api/books/b7?brief=yes request, with no request body.
+
+var express = require('express');
+var app = express();
+var router = express.Router();
+
+app.use(function (req, res, next) {
+    console.log('outer ' + req.url);
+    next();
+});
+
+router.use(function (req, res, next) {
+    console.log('inner ' + req.url);
+    console.log('original ' + req.originalUrl);
+    next();
+});
+
+router.get('/books/:id', function (req, res, next) {
+    console.log('book ' + req.params.id + ' ' + req.query.brief);
+    next(new Error('catalog unavailable'));
+});
+
+router.use(function (req, res) {
+    console.log('router fallback');
+    res.end('fallback');
+});
+
+app.use('/api', router);
+app.use(function (err, req, res, next) {
+    console.log('handled ' + err.message);
+    res.statusCode = 503;
+    res.end('try later');
+});
+app.listen(3000);
+
+a. Give the exact console.log output for this request, in order. (3 points)
+b. Give the response status and body. (1 point)
+c. Explain the two URL forms, how the route obtains id and brief, and why
+   the router fallback runs or is skipped. (3 points)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 15 - Errors across an asynchronous boundary (6 points)
+
+Assume a GET request reaches this core Node.js HTTP server. The file read
+completes asynchronously with an Error whose code is ENOENT. No process-level
+exception handler is installed, and no other requests are in flight.
+
+var http = require('http');
+var fs = require('fs');
+
+http.createServer(function (req, res) {
+    try {
+        fs.readFile('absent.txt', function (err, data) {
+            if (err) {
+                throw err;
+            }
+            res.end(data);
+        });
+        console.log('read scheduled');
+    } catch (err) {
+        console.log('caught');
+        res.statusCode = 500;
+        res.end('failed');
+    }
+}).listen(3000);
+
+a. State the console.log output, whether the catch block runs, whether this
+   code completes an HTTP error response, and what happens to the server
+   process. Explain the execution boundary responsible. (3 points)
+b. Rewrite the request handler to send a completed plain-text 404 response
+   for ENOENT, a completed plain-text 500 response for any other read error,
+   and the file contents on success. Every branch must send at most one
+   response. (3 points)
+
+ANSWER:
+
+
+
+
+
+
+======================================================================
+SECTION D - PRACTICAL DESIGN AND APPLICATION (20 POINTS)
+======================================================================
+
+QUESTION 16 - A small core HTTP streaming service (10 points)
+
+Write a complete CommonJS server using core modules only, listening on port
+3000. Do not use Express or buffer the whole file.
+
+Requirements:
+
+- GET /report streams the fixed file report.txt located beside the server
+  script. Send status 200 and Content-Type text/plain on success. (3 points)
+- If opening that file fails with ENOENT, send a completed plain-text 404
+  response. For another file error, send a completed plain-text 500 response.
+  For this question, all file failures occur before any response bytes have
+  been sent; assume there are no client disconnects or later stream errors.
+  (2 points)
+- Other paths receive a completed 404 response. A method other than GET on
+  /report receives a completed 405 response. Query strings are outside this
+  question's scope: all test URLs are paths without a query. (2 points)
+- All branches complete correctly without accidentally sending a second
+  response, and the file path works regardless of the working directory.
+  (1 point)
+
+Then write, without executing, two curl commands: one to inspect the successful
+response including headers, and one to send POST to /report. State the expected
+status for each command when report.txt exists and is readable. (2 points)
+
+ANSWER:
+
+
+
+
+
+
+QUESTION 17 - A reusable reading-list API (10 points)
+
+Write a complete small CommonJS Express application with a Router mounted
+at /reading. Use an in-memory collection; no database or front end is needed.
+Each stored book has an id and a title. Assume a single process and no restarts
+during the request sequence. Generated identifiers must be unique within that
+process. You may choose the collection structure.
+
+a. Set up the application, JSON body parsing, router mounting, and port 3000.
+   Place middleware in an order that makes the routes work. (2 points)
+b. Implement GET /reading to return the collection as JSON, POST /reading
+   to create a book from {"title":"..."}, and GET /reading/:id to return one
+   book. The create response must include the generated id. Choose and state
+   appropriate success status codes. (3 points)
+c. Reject a missing or blank title with 400, return 404 for an unknown id,
+   and handle malformed JSON with 400. Return JSON for these errors and
+   avoid revealing internal stack traces. You may assume each syntactically
+   valid POST body is a plain object, and the parser identifies malformed
+   JSON with err.status === 400. (2 points)
+d. Show two request/response examples: creating a book and then retrieving
+   that same book by its returned id. Include methods, URLs, relevant headers,
+   request bodies where applicable, response status codes, and JSON bodies.
+   These are written examples; do not execute requests. (2 points)
+e. Explain how mounting the same router at /library would change its public
+   URLs and whether its internal route paths would need editing. (1 point)
+
+ANSWER:
+
+
+
+
+
+
+END OF EXAMINATION
+
+Before submitting, check that each part has an answer or "I don't know" and
+that output questions include reasoning. Save this file with your answers,
+or save a copy named NODEJS_EXAM-CHECKPOINT-02-CH05-07 - Answers.txt.
+Submit the completed answers for evaluation. A score has not been assigned
+until the answers are evaluated under NODEJS_STUDY_PROTOCOL.md.

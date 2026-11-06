@@ -19,9 +19,10 @@
 
 ## Next action
 
-Begin the next unit: Chapters 5-7. Read actively and prepare a short
-summary, key terms, mental models, and examples before the next closed-book
-assessment.
+Complete `NODEJS_EXAM-CHECKPOINT-02-CH05-07.txt` under closed-book
+conditions using a plain-text editor, then submit the completed answers for
+evaluation. The learner reported reading Chapters 5-7 and requested the exam
+on 2026-11-06. No hints or answers should be provided during the examination.
 
 ## Advancement status
 
@@ -32,4 +33,11 @@ weakness log with mastered status and resolution evidence.
 
 - Checkpoint: 02
 - Coverage: Chapters 5-7
-- Status: reading and preparation
+- Topics: Events and Streams; Getting Started with HTTP; Introducing Express
+- Reading status: learner reports having read the unit
+- Exam file: `NODEJS_EXAM-CHECKPOINT-02-CH05-07.txt`
+- Date issued: 2026-11-06
+- Total available: 100 points (A 30, B 25, C 25, D 20)
+- Status: exam issued; awaiting learner answers
+- Score: not yet evaluated
+- Advancement: Chapters 5-7 mastery must be established before advancing
